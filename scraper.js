@@ -1,30 +1,22 @@
 var request = require("request");
 var cheerio = require("cheerio");
 
-// 台南市的氣溫
-var url = "http://www.wunderground.com/weather-forecast/zmw:00000.1.59358";
+// unicode轉換成中文
+function deunicode(s){ 
 
-// // 取得網頁資料
-// request(url, function (error, response, body) {
+	var k = s.split(";"); 
+	var rs = "";
 
-//   if (!error) {
+	for( i = 0; i < k.length - 1; i++){ 
 
-//     // 用 cheerio 解析 html 資料
-//     var $ = cheerio.load(body);
+		var m = k[i].replace(/&#/, "0"); 
+		rs += String.fromCharCode(m); 
+	}
 
-//     // 篩選有興趣的資料
-//     var temperature = $("[data-variable='temperature'] .wx-value").html();
-//     var humidity = $("[data-variable='humidity'] .wx-value").html();
+	return rs; 
+} 
 
-//     // 輸出
-//     console.log("氣溫：攝氏 " + temperature + " 度");
-//     console.log("濕度：" + humidity + "%");
 
-//   } else {
-//     console.log("擷取錯誤：" + error);
-//   }
-
-// });
 
 request('http://movie.ck101.com/movie/39/', function (error, response, body) {
 
@@ -32,10 +24,10 @@ request('http://movie.ck101.com/movie/39/', function (error, response, body) {
 
   	var $ = cheerio.load(body);
   	var title_tw = $('main').find('h2').html();
-  	// var dec = decodeURIComponent(title_tw);
+  	var dec = decodeURIComponent(title_tw);
 
   	// 輸出中文標題
-    console.log(title_tw);
+    console.log(deunicode(title_tw));
 
   }else {
 
